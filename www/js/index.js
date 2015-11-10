@@ -35,6 +35,8 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         testDb('Smartgeo3806121311783874177052375436098933651436526648471', 'SELECT * FROM assets WHERE symbolid REGEXP(\'.*\')');     
+        // Brody suggest this instead:
+        //testDb('Smartgeo3806121311783874177052375436098933651436526648471', "SELECT * FROM assets WHERE symbolid REGEXP('.*')");
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -50,10 +52,21 @@ var app = {
 app.initialize();
 function testDb(dbname, request){
     console.log('test begin');
-    db = sqlitePlugin.openDatabase({name: dbname, createFromLocation: 1});
-    var db = openDatabase(dbname, "1.0", "Demo", 4096);
+    // WRONG:
+    //db = sqlitePlugin.openDatabase({name: dbname, createFromLocation: 1});
+    //var db = openDatabase(dbname, "1.0", "Demo", 4096);
+    // FIX:
+    var db = sqlitePlugin.openDatabase({name: dbname, createFromLocation: 1});
     document.getElementById('testDb').innerHTML = 'no in transaction';
     console.log('db: ' + db);
+    /* Brody suggest for extra test:
+    db.executeSql("SELECT COUNT(*) FROM assets", [], function(res) {
+      document.getElementById('checkCount').innerHTML = 'GOT COUNT: ' + JSON.stringify(res.rows.item(0));
+    }, function(error) {
+      console.log('SELECT COUNT ERROR: ' + JSON.stringify(error));
+      document.getElementById('checkCount').innerHTML = 'COUNT ERROR';
+    });
+    */
     db.transaction(function(tx){
         console.log('in transaction');
         tx.executeSql(request, [], function(tx, rows){
@@ -61,6 +74,8 @@ function testDb(dbname, request){
             document.getElementById('testDb').innerHTML = 'it worked';
         }, function(error){
             console.log(error);
+            // Brody suggest this instead:
+            //console.log('ERROR: ' + JSON.stringify(error));
             document.getElementById('testDb').innerHTML = 'error when executeSql';
         });
     });
