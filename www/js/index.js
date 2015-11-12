@@ -34,9 +34,9 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        testDb('Smartgeo3806121311783874177052375436098933651436526648471', 'SELECT * FROM assets WHERE symbolid REGEXP(\'.*\')');     
-        // Brody suggest this instead:
+
         //testDb('Smartgeo3806121311783874177052375436098933651436526648471', "SELECT * FROM assets WHERE symbolid REGEXP('.*')");
+        testDb('Smartgeo3806121311783874177052375436098933651436526648471', "SELECT * FROM assets WHERE LOWER(asset) REGEXP('\"guid\":(|\")10101(,|\"|\}|\\)')");
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -70,12 +70,12 @@ function testDb(dbname, request){
     db.transaction(function(tx){
         console.log('in transaction');
         tx.executeSql(request, [], function(tx, rows){
-            console.log('results: ' + rows);
+            console.log('results: ' + JSON.stringify(rows));
             document.getElementById('testDb').innerHTML = 'it worked';
         }, function(error){
             console.log(error);
             // Brody suggest this instead:
-            //console.log('ERROR: ' + JSON.stringify(error));
+            console.log('ERROR: ' + JSON.stringify(error));
             document.getElementById('testDb').innerHTML = 'error when executeSql';
         });
     });
