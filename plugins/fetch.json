@@ -1,13 +1,4 @@
 {
-    "cordova-sqlite-storage": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/brodybits/Cordova-sqlite-storage-test",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
@@ -20,6 +11,15 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-console"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-sqlite-extra-regexp": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brodybits/cordova-sqlite-extra-regexp.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
